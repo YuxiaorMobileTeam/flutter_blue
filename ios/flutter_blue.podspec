@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name = "flutter_blue"
-  s.version = "0.9.1"
+  s.version = "0.9.2"
   s.summary = "Bluetooth Low Energy plugin for Flutter."
   s.description = <<-DESC
 Bluetooth Low Energy plugin for Flutter.
