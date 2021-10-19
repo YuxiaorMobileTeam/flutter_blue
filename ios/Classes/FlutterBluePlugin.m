@@ -48,7 +48,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   FlutterEventChannel* stateChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/state" binaryMessenger:[registrar messenger]];
   FlutterBluePlugin* instance = [[FlutterBluePlugin alloc] init];
   instance.channel = channel;
-  instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
+  // 禁止插件初始化时，获取蓝牙状态时，弹系统弹框
+  NSDictionary *options = @{CBCentralManagerOptionShowPowerAlertKey: @NO};
+  instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil options:options];
   instance.scannedPeripherals = [NSMutableDictionary new];
   instance.servicesThatNeedDiscovered = [NSMutableArray new];
   instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
