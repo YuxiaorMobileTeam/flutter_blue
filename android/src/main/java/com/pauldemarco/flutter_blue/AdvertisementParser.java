@@ -27,6 +27,8 @@
 
 package com.pauldemarco.flutter_blue;
 
+import android.util.Log;
+
 import com.google.protobuf.ByteString;
 import com.pauldemarco.flutter_blue.Protos.AdvertisementData;
 
@@ -119,21 +121,26 @@ class AdvertisementParser {
           break;
         }
         case 0xFF: {// Manufacturer specific data.
+          Log.e("wsl", "111111111111");
           if(length < 2) {
             throw new ArrayIndexOutOfBoundsException("Not enough data for Manufacturer specific data.");
           }
+          Log.e("wsl", "22222222222222");
           int manufacturerId = data.getShort();
           if((length - 2) > 0) {
             byte[] msd = new byte[length - 2];
             data.get(msd);
             ByteString newData = null;
             ByteString oldData = mapData.get(manufacturerId);
+            Log.e("wsl", "oldData: " + oldData);
             if(oldData != null) {
               newData = oldData;
               newData.concat(ByteString.copyFrom(msd));
             } else {
               newData = ByteString.copyFrom(msd);
             }
+            Log.e("wsl", "newData: " + newData);
+            mapData.put(manufacturerId, newData);
             ret.putManufacturerData(manufacturerId, newData);
           }
           break;
