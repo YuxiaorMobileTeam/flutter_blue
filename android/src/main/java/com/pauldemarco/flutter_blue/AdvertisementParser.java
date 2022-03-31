@@ -33,6 +33,8 @@ import com.pauldemarco.flutter_blue.Protos.AdvertisementData;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -51,6 +53,8 @@ class AdvertisementParser {
     ByteBuffer data = ByteBuffer.wrap(rawData).asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
     AdvertisementData.Builder ret = AdvertisementData.newBuilder();
     boolean seenLongLocalName = false;
+    Map<Integer, ByteString> mapData = new HashMap<>();
+
     do {
       int length = data.get() & 0xFF;
       if (length == 0) {
@@ -121,7 +125,16 @@ class AdvertisementParser {
           if((length - 2) > 0) {
             byte[] msd = new byte[length - 2];
             data.get(msd);
-            ret.putManufacturerData(manufacturerId, ByteString.copyFrom(msd));
+            ByteString oldData = mapData.get(manufacturerId);
+            ByteString newData = null;
+            if(oldData != null) {
+              newData = oldData.concat(ByteString.copyFrom(msd));
+            } else {
+              newData = ByteString.copyFrom(msd);
+            }
+            mapData.put(manufacturerId, newData);
+            ret.putManufacturerData(manufacturerId, newData);
+            // ret.putManufacturerData(manufacturerId, ByteString.copyFrom(msd));
           }
           break;
         }

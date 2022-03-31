@@ -67,7 +67,9 @@ public class ProtoMaker {
                 a.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(txPower));
             }
             // Manufacturer Specific Data
-            SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
+            // SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
+            byte[] bytes = scanRecord.getBytes();
+            SparseArray<byte[]> msd = YxrScanRecord.parseManufacturerDataFromBytes(bytes);
             for (int i = 0; i < msd.size(); i++) {
                 int key = msd.keyAt(i);
                 byte[] value = msd.valueAt(i);
@@ -90,6 +92,13 @@ public class ProtoMaker {
         }
         p.setRssi(scanResult.getRssi());
         p.setAdvertisementData(a.build());
+        // if (scanRecord != null) {
+        //     byte[] bytes = scanRecord.getBytes();
+        //     if(bytes != null && bytes.length > 0) {
+        //         Protos.AdvertisementData data = AdvertisementParser.parse(bytes);
+        //         p.setAdvertisementData(data);
+        //     }
+        // }
         return p.build();
     }
 
