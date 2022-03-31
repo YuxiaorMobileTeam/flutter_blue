@@ -73,7 +73,7 @@ class YxrScanRecord {
                             int newLength = oldBytes.length + manufacturerDataBytes.length;
                             byte[] bytes = new byte[newLength];
                             System.arraycopy(oldBytes, 0, bytes, 0, oldBytes.length);
-                            System.arraycopy(manufacturerDataBytes, 0, bytes, 0, manufacturerDataBytes.length);
+                            System.arraycopy(oldBytes, 0, bytes, oldBytes.length, manufacturerDataBytes.length);
                             manufacturerDataBytes = bytes;
                         }
                         manufacturerData.put(manufacturerId, manufacturerDataBytes);
