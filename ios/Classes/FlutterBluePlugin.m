@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 
 @implementation FlutterBluePlugin
 
--（CBCentralManager *)centralManager {
+- (CBCentralManager *)centralManager {
   if (_centralManager == nil) {
     NSDictionary *options = @{CBCentralManagerOptionShowPowerAlertKey: @NO};
     _centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:options];
